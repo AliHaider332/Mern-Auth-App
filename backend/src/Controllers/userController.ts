@@ -361,7 +361,7 @@ export const fireBaseAuth = asyncHandler(async (req, res) => {
 
   const JWT_Token = generateToken(USER._id.toString()) as string;
 
-  res.cookie('uid', token, {
+  res.cookie('uid', JWT_Token, {
     httpOnly: true,
     secure: isProd,        // MUST be true in production
     sameSite: isProd ? 'none' : 'lax',
