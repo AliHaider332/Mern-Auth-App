@@ -11,7 +11,7 @@ interface JwtPayload {
 export const checkAuthentication = asyncHandler(
   async (req: Request, res: Response, next: NextFunction) => {
     const { uid } = req.cookies;
-    console.log(req.cookies,"Hi",uid);
+    
     
     if (!uid) {
       throw new CustomError(400, 'Please login first');

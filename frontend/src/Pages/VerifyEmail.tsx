@@ -14,9 +14,13 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   useEffect(() => {
+    console.log(token);
+
     const verifyToken = async () => {
       try {
         const res = await axiosInstance.get(`/verifyEmail/${token}`);
+        console.log(res.data);
+
         setIsValidToken(true);
         navigate('/');
         dispatch(setUser(res.data.data));
