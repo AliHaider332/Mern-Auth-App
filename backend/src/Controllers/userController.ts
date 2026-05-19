@@ -8,6 +8,7 @@ import { sendEmail, sendOTP, sendResetEmail } from '../Services/nodemailer';
 import { generateToken, verifyToken } from '../Services/JWT';
 import crypto from 'crypto';
 import admin from '../Configs/firebase';
+const isProd = process.env.NODE_ENV === 'production';
 export const signupController = asyncHandler(
   async (req: Request, res: Response) => {
     const data = (req as Request & { user?: UserInterface }).user;
@@ -29,9 +30,9 @@ export const signupController = asyncHandler(
     const token = generateToken(newUser._id.toString());
     res.cookie('uid', token, {
       httpOnly: true,
-      secure: process.env.NODE_MODE === 'DEVELOPMENT', // use true in production (HTTPS)
-      sameSite: 'strict',
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: isProd,        // MUST be true in production
+      sameSite: isProd ? 'none' : 'lax',
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     await sendEmail(name.split(' ')[0], email, newUser._id.toString());
@@ -160,9 +161,9 @@ export const verifyOTP = asyncHandler(async (req, res) => {
   const token = generateToken(requireUser._id.toString());
   res.cookie('uid', token, {
     httpOnly: true,
-    secure: process.env.NODE_MODE === 'DEVELOPMENT', // use true in production (HTTPS)
-    sameSite: 'strict',
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    secure: isProd,        // MUST be true in production
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000,
   });
   requireUser.otp = null;
   requireUser.otpExpiry = null;
@@ -304,8 +305,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
   // Clear the cookie
   res.clearCookie('uid', {
     httpOnly: true,
-    secure: true, // use true in production (HTTPS)
-    sameSite: 'strict', // match your original cookie settings
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
   });
 
   return res.status(200).json({ message: 'Logged out successfully' });
@@ -323,9 +324,9 @@ export const sendVerificationEmail = asyncHandler(async (req, res) => {
   const token = generateToken(requireUser._id.toString());
   res.cookie('uid', token, {
     httpOnly: true,
-    secure: process.env.NODE_MODE === 'DEVELOPMENT', // use true in production (HTTPS)
-    sameSite: 'strict',
-    maxAge: 24 * 60 * 60 * 1000, // 1 day
+    secure: isProd,        // MUST be true in production
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000,
   });
 
   await sendEmail(
@@ -360,13 +361,10 @@ export const fireBaseAuth = asyncHandler(async (req, res) => {
 
   const JWT_Token = generateToken(USER._id.toString()) as string;
 
-  res.cookie('uid', JWT_Token, {
+  res.cookie('uid', token, {
     httpOnly: true,
-
-    secure: process.env.NODE_ENV === 'production',
-
-    sameSite: 'strict',
-
+    secure: isProd,        // MUST be true in production
+    sameSite: isProd ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000,
   });
 
