@@ -7,7 +7,6 @@ import { BeatLoader } from 'react-spinners';
 import { Eye, EyeOff } from 'lucide-react';
 import { axiosInstance } from '../Config/axios';
 import { toast } from 'react-toastify';
-import axios from 'axios';
 import { setUser } from '../Store/Slices/User.Slice';
 import { useDispatch } from 'react-redux';
 import GoogleAuth from '../Components/GoogleAuth';
@@ -59,22 +58,14 @@ const Signup: React.FC = () => {
         email: data.email,
         password: data.password,
       });
-      console.log(res.data);
-      
-
       toast.success(res.data.message);
       dispatch(setUser(res.data.data));
       navigate('/');
-
-      await new Promise((resolve) => setTimeout(resolve, 1000));
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data?.message || 'Signup failed';
-        toast.error(message);
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error('Something went wrong');
+        toast.error('Signup failed');
       }
     }
     // Simulate API call
@@ -82,9 +73,7 @@ const Signup: React.FC = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 p-5">
-      
       <div className="bg-white rounded-2xl p-8 shadow-lg w-full max-w-md">
-        
         {/* Heading */}
         <h1 className="text-3xl font-bold mb-4 text-center text-gray-800">
           Create Account
@@ -92,9 +81,8 @@ const Signup: React.FC = () => {
         <p className="text-center text-gray-500 text-sm mb-6">
           Join us and get started
         </p>
-  
+
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
-  
           {/* Full Name */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-600">
@@ -107,17 +95,13 @@ const Signup: React.FC = () => {
               placeholder="Enter your full name"
             />
             {errors.fullName && (
-              <p className="text-xs text-red-500">
-                {errors.fullName.message}
-              </p>
+              <p className="text-xs text-red-500">{errors.fullName.message}</p>
             )}
           </div>
-  
+
           {/* Email */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-sm font-medium text-gray-600">
-              Email
-            </label>
+            <label className="text-sm font-medium text-gray-600">Email</label>
             <input
               type="email"
               {...register('email')}
@@ -125,12 +109,10 @@ const Signup: React.FC = () => {
               placeholder="Enter your email"
             />
             {errors.email && (
-              <p className="text-xs text-red-500">
-                {errors.email.message}
-              </p>
+              <p className="text-xs text-red-500">{errors.email.message}</p>
             )}
           </div>
-  
+
           {/* Password */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-600">
@@ -153,12 +135,10 @@ const Signup: React.FC = () => {
               </button>
             </div>
             {errors.password && (
-              <p className="text-xs text-red-500">
-                {errors.password.message}
-              </p>
+              <p className="text-xs text-red-500">{errors.password.message}</p>
             )}
           </div>
-  
+
           {/* Confirm Password */}
           <div className="flex flex-col gap-1.5">
             <label className="text-sm font-medium text-gray-600">
@@ -186,7 +166,7 @@ const Signup: React.FC = () => {
               </p>
             )}
           </div>
-  
+
           {/* Submit */}
           <button
             type="submit"
@@ -207,17 +187,17 @@ const Signup: React.FC = () => {
             )}
           </button>
         </form>
-  
+
         {/* Divider */}
         <div className="flex items-center gap-3 my-6">
           <div className="flex-1 h-px bg-gray-200"></div>
           <span className="text-xs text-gray-400">OR</span>
           <div className="flex-1 h-px bg-gray-200"></div>
         </div>
-  
+
         {/* Google Auth */}
         <GoogleAuth />
-  
+
         {/* Login Link */}
         <div className="text-center mt-5">
           <p className="text-sm text-gray-600">
@@ -230,7 +210,6 @@ const Signup: React.FC = () => {
             </Link>
           </p>
         </div>
-  
       </div>
     </div>
   );

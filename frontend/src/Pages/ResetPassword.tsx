@@ -8,7 +8,8 @@ import { BeatLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
 import { Eye, EyeOff, Shield, CheckCircle } from 'lucide-react';
 import { axiosInstance } from '../Config/axios';
-import axios from 'axios';
+import { setUser } from '../Store/Slices/User.Slice';
+import { useDispatch } from 'react-redux';
 
 const resetPasswordSchema = z
   .object({
@@ -24,6 +25,7 @@ type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { token } = useParams<{ token: string }>();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -50,10 +52,7 @@ const ResetPassword: React.FC = () => {
         await axiosInstance.get(`/verifyToken/${token}`);
         setIsValidToken(true);
       } catch (error: unknown) {
-        if (axios.isAxiosError(error)) {
-          const message = error.response?.data?.message || 'Login failed';
-          toast.error(message);
-        } else if (error instanceof Error) {
+        if (error instanceof Error) {
           toast.error(error.message);
         } else {
           toast.error('Something went wrong');
@@ -70,23 +69,15 @@ const ResetPassword: React.FC = () => {
   const onSubmit = async (data: ResetPasswordFormData) => {
     setIsResetting(true);
     try {
-      await axiosInstance.post(`/resetPassword/${token}`, {
+      const res = await axiosInstance.post(`/resetPassword/${token}`, {
         password: data.password,
       });
 
-      toast.success(
-        'Password reset successful! Please login with your new password'
-      );
-
-      // Redirect to login after 2 seconds
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      toast.success('Password reset successful');
+      dispatch(setUser(res.data.data));
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message || 'Failed to reset password';
-        toast.error(message);
+      if (error instanceof Error) {
+        toast.error(error.message);
       } else {
         toast.error('Something went wrong');
       }

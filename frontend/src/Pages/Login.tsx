@@ -8,7 +8,6 @@ import { toast } from 'react-toastify';
 import { Eye, EyeOff, Mail, ArrowLeft } from 'lucide-react';
 import { axiosInstance } from '../Config/axios';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setEmailState } from '../Store/Slices/auth.support';
 import { setUser } from '../Store/Slices/User.Slice';
@@ -69,13 +68,10 @@ const Login: React.FC = () => {
         });
       }, 1000);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const message = error.response?.data?.message || 'Login failed';
-        toast.error(message);
-      } else if (error instanceof Error) {
+      if (error instanceof Error) {
         toast.error(error.message);
       } else {
-        toast.error('Something went wrong');
+        toast.error("LogIn failed");
       }
     }
   };
@@ -91,11 +87,8 @@ const Login: React.FC = () => {
       dispatch(setUser(res.data.data));
       navigate('/');
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        console.log(error);
-
-        const message = error.response?.data?.message || 'Invalid OTP';
-        toast.error(message);
+      if (error instanceof Error) {
+        toast.error(error.message);
       } else {
         toast.error('Something went wrong');
       }
@@ -122,10 +115,8 @@ const Login: React.FC = () => {
         });
       }, 1000);
     } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        const message =
-          error.response?.data?.message || 'Failed to reset password';
-        toast.error(message);
+      if (error instanceof Error) {
+        toast.error(error.message);
       } else {
         toast.error('Something went wrong');
       }
