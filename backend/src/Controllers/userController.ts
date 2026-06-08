@@ -302,14 +302,14 @@ export const logoutUser = asyncHandler(async (req, res) => {
   if (!uid) {
     return res.status(401).json({ message: 'No token found' });
   }
-  console.log(uid);
+ 
 
   // Clear the cookie
   res.clearCookie('uid', {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
+    domain: '.myapp.com',
     path: '/',
+    secure: true,
+    sameSite: 'none',
   });
 
   return res.status(200).json({ message: 'Logged out successfully' });
