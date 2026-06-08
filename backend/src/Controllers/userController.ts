@@ -217,6 +217,8 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 });
 export const verifyForgotPasswordToken = asyncHandler(async (req, res) => {
   const { token } = req.params as any;
+  
+  
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
   const requireUser = await user.findOne({
     resetPasswordToken: hashedToken,
