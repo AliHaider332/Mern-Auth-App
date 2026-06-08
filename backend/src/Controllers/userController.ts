@@ -30,7 +30,7 @@ export const signupController = asyncHandler(
     const token = generateToken(newUser._id.toString());
     res.cookie('uid', token, {
       httpOnly: true,
-      secure: isProd,        // MUST be true in production
+      secure: isProd, // MUST be true in production
       sameSite: isProd ? 'none' : 'lax',
       maxAge: 24 * 60 * 60 * 1000,
     });
@@ -161,7 +161,7 @@ export const verifyOTP = asyncHandler(async (req, res) => {
   const token = generateToken(requireUser._id.toString());
   res.cookie('uid', token, {
     httpOnly: true,
-    secure: isProd,        // MUST be true in production
+    secure: isProd, // MUST be true in production
     sameSite: isProd ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -217,8 +217,7 @@ export const forgotPassword = asyncHandler(async (req, res) => {
 });
 export const verifyForgotPasswordToken = asyncHandler(async (req, res) => {
   const { token } = req.params as any;
-  
-  
+
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
   const requireUser = await user.findOne({
     resetPasswordToken: hashedToken,
@@ -303,12 +302,14 @@ export const logoutUser = asyncHandler(async (req, res) => {
   if (!uid) {
     return res.status(401).json({ message: 'No token found' });
   }
+  console.log(uid);
 
   // Clear the cookie
   res.clearCookie('uid', {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
+    path: '/',
   });
 
   return res.status(200).json({ message: 'Logged out successfully' });
@@ -326,7 +327,7 @@ export const sendVerificationEmail = asyncHandler(async (req, res) => {
   const token = generateToken(requireUser._id.toString());
   res.cookie('uid', token, {
     httpOnly: true,
-    secure: isProd,        // MUST be true in production
+    secure: isProd, // MUST be true in production
     sameSite: isProd ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000,
   });
@@ -365,7 +366,7 @@ export const fireBaseAuth = asyncHandler(async (req, res) => {
 
   res.cookie('uid', JWT_Token, {
     httpOnly: true,
-    secure: isProd,        // MUST be true in production
+    secure: isProd, // MUST be true in production
     sameSite: isProd ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000,
   });
