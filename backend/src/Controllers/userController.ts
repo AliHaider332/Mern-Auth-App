@@ -306,8 +306,6 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
   // Clear the cookie
   res.clearCookie('uid', {
-    domain: '.myapp.com',
-    path: '/',
     secure: true,
     sameSite: 'none',
   });
