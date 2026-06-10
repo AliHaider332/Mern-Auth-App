@@ -317,7 +317,8 @@ export const logoutUser = asyncHandler(async (req, res) => {
     expires: new Date(0),
   });
 
-  res.status(200).json({
+  return res.status(200).json({
+    success: true,
     message: 'Logged out successfully',
   });
 });
