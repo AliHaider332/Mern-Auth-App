@@ -306,8 +306,9 @@ export const logoutUser = asyncHandler(async (req, res) => {
 
   // Clear the cookie
   res.clearCookie('uid', {
-    secure: true,
-    sameSite: 'none',
+    httpOnly: true,
+    secure: true,      // same as creation
+    sameSite: 'none',  // same as creation
   });
 
   return res.status(200).json({ message: 'Logged out successfully' });
