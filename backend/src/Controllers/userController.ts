@@ -256,6 +256,13 @@ export const resetPassword = asyncHandler(async (req, res) => {
 
   requireUser.resetPasswordToken = null;
   requireUser.resetPasswordExpire = null;
+  const cookieToken = generateToken(requireUser._id.toString());
+  res.cookie('uid', cookieToken, {
+    httpOnly: true,
+    secure: isProd, // MUST be true in production
+    sameSite: isProd ? 'none' : 'lax',
+    maxAge: 24 * 60 * 60 * 1000,
+  });
 
   await requireUser.save();
 
