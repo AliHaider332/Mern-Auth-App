@@ -308,14 +308,14 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.cookie('uid', '', {
+  res.clearCookie('uid', {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
     path: '/',
-    expires: new Date(0),
   });
-  
+  const { uid } = req.cookies;
+  console.log(uid);
 
   return res.status(200).json({
     success: true,
