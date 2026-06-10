@@ -7,13 +7,15 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '../Config/axios';
 import { LogOutUser } from '../Store/Slices/User.Slice';
-
+import { signOut } from 'firebase/auth';
+import {auth} from './firebase'
 const Header = () => {
   // const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
       const res = await axiosInstance.get('/logout-user');
+      await signOut(auth);
       toast.success(res.data.message);
       dispatch(LogOutUser());
     } catch (error) {
@@ -28,8 +30,7 @@ const Header = () => {
     }
   };
   const { authorized, user } = useSelector((state: RootState) => state.user);
- 
-  
+
   return (
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

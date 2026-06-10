@@ -311,6 +311,7 @@ export const logoutUser = asyncHandler(async (req, res) => {
   res.setHeader('Set-Cookie', [
     `uid=; Path=/; HttpOnly; SameSite=None; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
   ]);
+  
 
   return res.status(200).json({
     success: true,
