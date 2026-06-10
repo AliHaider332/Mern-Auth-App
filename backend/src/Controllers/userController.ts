@@ -9,6 +9,8 @@ import { generateToken, verifyToken } from '../Services/JWT';
 import crypto from 'crypto';
 import admin from '../Configs/firebase';
 const isProd = process.env.NODE_ENV === 'production';
+console.log(isProd);
+
 export const signupController = asyncHandler(
   async (req: Request, res: Response) => {
     const data = (req as Request & { user?: UserInterface }).user;
