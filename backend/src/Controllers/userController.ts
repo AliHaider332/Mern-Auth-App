@@ -10,7 +10,6 @@ import crypto from 'crypto';
 import admin from '../Configs/firebase';
 const isProd = process.env.NODE_ENV === 'production';
 
-
 export const signupController = asyncHandler(
   async (req: Request, res: Response) => {
     const data = (req as Request & { user?: UserInterface }).user;
@@ -309,13 +308,9 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.cookie('uid', '', {
-    httpOnly: true,
-    secure: isProd,
-    sameSite: isProd ? 'none' : 'lax',
-    path: '/',
-    expires: new Date(0),
-  });
+  res.setHeader('Set-Cookie', [
+    `uid=; Path=/; HttpOnly; SameSite=None; Secure; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+  ]);
 
   return res.status(200).json({
     success: true,
