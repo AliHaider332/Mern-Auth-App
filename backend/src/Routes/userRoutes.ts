@@ -25,7 +25,7 @@ userRoute.get('/verifyToken/:token', verifyForgotPasswordToken);
 userRoute.post('/resetPassword/:token', resetPassword);
 userRoute.post('/send-otp', checkAuthentication, sendAgainOTP);
 userRoute.get('/get-user', checkAuthentication, getUser);
-userRoute.get('/logout-user', checkAuthentication, logoutUser);
+userRoute.post('/logout-user', checkAuthentication, logoutUser);
 userRoute.post(
   '/send-verification-email-again',
   checkAuthentication,
