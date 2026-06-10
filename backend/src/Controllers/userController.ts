@@ -259,6 +259,7 @@ export const resetPassword = asyncHandler(async (req, res) => {
   const cookieToken = generateToken(requireUser._id.toString());
   res.cookie('uid', cookieToken, {
     httpOnly: true,
+    
     secure: isProd, // MUST be true in production
     sameSite: isProd ? 'none' : 'lax',
     maxAge: 24 * 60 * 60 * 1000,
@@ -304,23 +305,18 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  const { uid } = req.cookies;
-
-  if (!uid) {
-    return res.status(401).json({ message: 'No token found' });
-  }
- 
-
-  // Clear the cookie
-  res.clearCookie('uid', {
+  res.cookie('uid', '', {
     httpOnly: true,
-    secure: true,      // same as creation
-    sameSite: 'none',  // same as creation
+    secure: true,
+    sameSite: 'none',
+    expires: new Date(0),
+    path: '/',
   });
 
-  return res.status(200).json({ message: 'Logged out successfully' });
+  res.status(200).json({
+    message: 'Logged out successfully',
+  });
 });
-
 export const sendVerificationEmail = asyncHandler(async (req, res) => {
   const { email } = req.body;
   if (!email) {
