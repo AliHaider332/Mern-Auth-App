@@ -30,8 +30,9 @@ export const signupController = asyncHandler(
     const token = generateToken(newUser._id.toString());
     res.cookie('uid', token, {
       httpOnly: true,
-      secure: isProd, // MUST be true in production
+      secure: isProd,
       sameSite: isProd ? 'none' : 'lax',
+      path: '/',
       maxAge: 24 * 60 * 60 * 1000,
     });
 
@@ -161,8 +162,9 @@ export const verifyOTP = asyncHandler(async (req, res) => {
   const token = generateToken(requireUser._id.toString());
   res.cookie('uid', token, {
     httpOnly: true,
-    secure: isProd, // MUST be true in production
+    secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
+    path: '/',
     maxAge: 24 * 60 * 60 * 1000,
   });
   requireUser.otp = null;
@@ -259,9 +261,9 @@ export const resetPassword = asyncHandler(async (req, res) => {
   const cookieToken = generateToken(requireUser._id.toString());
   res.cookie('uid', cookieToken, {
     httpOnly: true,
-    
-    secure: isProd, // MUST be true in production
+    secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
+    path: '/',
     maxAge: 24 * 60 * 60 * 1000,
   });
 
@@ -305,11 +307,10 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.cookie('uid', '', {
+  res.clearCookie('uid', {
     httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    expires: new Date(0),
+    secure: isProd,
+    sameSite: isProd ? 'none' : 'lax',
     path: '/',
   });
 
@@ -329,11 +330,11 @@ export const sendVerificationEmail = asyncHandler(async (req, res) => {
   const token = generateToken(requireUser._id.toString());
   res.cookie('uid', token, {
     httpOnly: true,
-    secure: isProd, // MUST be true in production
+    secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
+    path: '/',
     maxAge: 24 * 60 * 60 * 1000,
   });
-
   await sendEmail(
     requireUser.name.split(' ')[0],
     email,
@@ -364,12 +365,13 @@ export const fireBaseAuth = asyncHandler(async (req, res) => {
     });
   }
 
-  const JWT_Token = generateToken(USER._id.toString()) as string;
+  const cookieToken = generateToken(USER._id.toString()) as string;
 
-  res.cookie('uid', JWT_Token, {
+  res.cookie('uid', cookieToken, {
     httpOnly: true,
-    secure: isProd, // MUST be true in production
+    secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
+    path: '/',
     maxAge: 24 * 60 * 60 * 1000,
   });
 
