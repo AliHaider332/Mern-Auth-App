@@ -14,7 +14,7 @@ const Header = () => {
   const dispatch = useDispatch();
   const handleLogout = async () => {
     try {
-      const res = await axiosInstance.get('/logout-user');
+      const res = await axiosInstance.post('/logout-user');
       await signOut(auth);
       toast.success(res.data.message);
       dispatch(LogOutUser());
