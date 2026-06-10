@@ -112,10 +112,11 @@ const InvalidTokenState: React.FC = () => (
 // Success Component
 const SuccessState: React.FC = () => {
   const navigate = useNavigate();
-  
+  const dispatch=useDispatch()
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/');
+      dispatch(setUser({}));
     }, 5000);
     
     return () => clearTimeout(timer);
