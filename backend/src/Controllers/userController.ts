@@ -309,11 +309,12 @@ export const getUser = asyncHandler(async (req, res) => {
 });
 
 export const logoutUser = asyncHandler(async (req, res) => {
-  res.clearCookie('uid', {
+  res.cookie('uid', '', {
     httpOnly: true,
     secure: isProd,
     sameSite: isProd ? 'none' : 'lax',
     path: '/',
+    expires: new Date(0),
   });
 
   res.status(200).json({
