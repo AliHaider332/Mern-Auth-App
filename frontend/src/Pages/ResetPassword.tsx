@@ -115,7 +115,7 @@ const SuccessState: React.FC = () => {
   
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/login');
+      navigate('/');
     }, 5000);
     
     return () => clearTimeout(timer);
